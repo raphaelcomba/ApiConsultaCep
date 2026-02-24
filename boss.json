@@ -1,0 +1,13 @@
+{
+	"name": "ApiConsultaCep",
+	"description": "",
+	"version": "1.0.0",
+	"homepage": "",
+	"mainsrc": "./src",
+	"projects": [],
+	"dependencies": {
+		"github.com/hashload/horse": "^3.1.9",
+		"github.com/hashload/jhonson": "^1.2.1",
+		"https://github.com/gabrielbaltazar/gbswagger": "3.1.0"
+	}
+}

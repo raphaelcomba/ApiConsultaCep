@@ -1,17 +1,57 @@
 program ApiConsultaCep;
 
 {$APPTYPE CONSOLE}
-
 {$R *.res}
 
 uses
-  System.SysUtils;
+  System.SysUtils,
+  Horse,
+  Horse.Jhonson,
+  Horse.GBSwagger,
+  ApiConsultaCep.Controller.Interfaces in 'src\controller\ApiConsultaCep.Controller.Interfaces.pas',
+  ApiConsultaCep.Controller.ConsultaCep in 'src\controller\ApiConsultaCep.Controller.ConsultaCep.pas',
+  ApiConsultaCep.Controller.RequestApi in 'src\controller\ApiConsultaCep.Controller.RequestApi.pas';
+
+var
+  FPort: Integer;
 
 begin
-  try
+  FPort := 9000;
+{$IFDEF Debug}
+  ReportMemoryLeaksOnShutdown := True;
+{$ENDIF}
 
-  except
-    on E: Exception do
-      Writeln(E.ClassName, ': ', E.Message);
-  end;
+  THorse
+    .Use(Jhonson)
+    .Use(HorseSwagger);
+
+  Swagger
+    .Host('localhost:9000')
+    .Info
+      .Title('API Consulta CEP')
+      .Description('API para consulta de endere�os a partir do CEP. Utiliza ViaCEP, ApiCEP e AwesomeAPI como fontes.')
+      .Version('1.0.0')
+    .&End
+    .Path('/consultaCep/{cep}')
+      .Tag('CEP')
+      .GET('Consulta endere�o pelo CEP', 'Retorna os dados de endere�o correspondentes ao CEP informado.')
+        .AddParamPath('cep', 'CEP a ser consultado (somente n�meros, 8 d�gitos)')
+          .Schema(SWAG_STRING)
+        .&End
+        .AddResponse(200, 'Endere�o encontrado com sucesso')
+        .&End
+        .AddResponse(400, 'CEP inv�lido ou n�o encontrado')
+        .&End
+      .&End
+    .&End;
+
+  TApiConsultaCepControllerConsultaCep.New.RegisterHorse;
+
+  THorse.Listen(FPort,
+    procedure
+    begin
+      writeln(Format('Server started on port %d', [FPort]));
+      writeln(Format('Swagger UI: http://localhost:%d/swagger/doc/html', [FPort]));
+    end);
+
 end.
