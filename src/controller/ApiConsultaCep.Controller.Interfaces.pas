@@ -15,7 +15,6 @@ type
 
   iEntidadeConsultaCep = interface
     ['{D6324125-6B4A-4935-9BF0-39B8EACAFAC0}']
-    function consultaCep(Req: THorseRequest;  Res: THorseResponse; Next: TProc): iEntidadeConsultaCep;
     function RegisterHorse: iEntidadeConsultaCep; overload;
   end;
 
