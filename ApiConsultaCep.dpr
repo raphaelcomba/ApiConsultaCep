@@ -34,13 +34,13 @@ begin
     .&End
     .Path('/consultaCep/{cep}')
       .Tag('CEP')
-      .GET('Consulta endere�o pelo CEP', 'Retorna os dados de endere�o correspondentes ao CEP informado.')
+      .GET('Consulta endere�o pelo CEP', 'Retorna os dados de endereço correspondentes ao CEP informado.')
         .AddParamPath('cep', 'CEP a ser consultado (somente n�meros, 8 d�gitos)')
           .Schema(SWAG_STRING)
         .&End
         .AddResponse(200, 'Endere�o encontrado com sucesso')
         .&End
-        .AddResponse(400, 'CEP inv�lido ou n�o encontrado')
+        .AddResponse(400, 'CEP inválido ou n�o encontrado')
         .&End
       .&End
     .&End;
