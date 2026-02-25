@@ -46,7 +46,11 @@ begin
     LResponse := TApiConsultaCepControllerRequestApi.New.Url(Format(AWESOME_API,[ACep])).GetErroRequest(FErro).RequestApi.GetResponse;
 
   if LResponse = '' then
+  begin
+    if FErro = '' then
+      FErro := 'CEP n�o encontrado ou todas as APIs est�o indispon�veis.';
     LResponse := FErro;
+  end;
 
   FResponse := LResponse;
 end;

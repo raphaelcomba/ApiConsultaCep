@@ -29,16 +29,16 @@ begin
     .Host('localhost:9000')
     .Info
       .Title('API Consulta CEP')
-      .Description('API para consulta de endere�os a partir do CEP. Utiliza ViaCEP, ApiCEP e AwesomeAPI como fontes.')
+      .Description('API para consulta de endereços a partir do CEP. Utiliza ViaCEP, ApiCEP e AwesomeAPI como fontes.')
       .Version('1.0.0')
     .&End
     .Path('/consultaCep/{cep}')
       .Tag('CEP')
-      .GET('Consulta endere�o pelo CEP', 'Retorna os dados de endereço correspondentes ao CEP informado.')
-        .AddParamPath('cep', 'CEP a ser consultado (somente n�meros, 8 d�gitos)')
+      .GET('Consulta endereço pelo CEP', 'Retorna os dados de endereço correspondentes ao CEP informado.')
+        .AddParamPath('cep', 'CEP a ser consultado (somente números, 8 digitos)')
           .Schema(SWAG_STRING)
         .&End
-        .AddResponse(200, 'Endere�o encontrado com sucesso')
+        .AddResponse(200, 'Endereço encontrado com sucesso')
         .&End
         .AddResponse(400, 'CEP inválido ou n�o encontrado')
         .&End

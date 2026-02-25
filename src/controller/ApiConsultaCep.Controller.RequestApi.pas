@@ -7,12 +7,15 @@ uses
   System.SysUtils,
   System.Net.HttpClient;
 
+const
+  REQUEST_TIMEOUT_MS = 5000;
+
 type
   TApiConsultaCepControllerRequestApi = class(TInterfacedObject, iEntidadeApi)
   private
     FUrl: String;
     FResponse: String;
-    FErro: String;
+    FErroRef: PString;
   public
     constructor Create; reintroduce;
     class function New: iEntidadeApi;
@@ -30,13 +33,14 @@ implementation
 constructor TApiConsultaCepControllerRequestApi.Create;
 begin
   inherited;
+  FErroRef := nil;
 end;
 
 function TApiConsultaCepControllerRequestApi.GetErroRequest(
   var AErro: String): iEntidadeApi;
 begin
   Result := Self;
-  FErro := AErro;
+  FErroRef := @AErro;
 end;
 
 function TApiConsultaCepControllerRequestApi.GetResponse: String;
@@ -58,13 +62,16 @@ begin
 
   LHttpClient := THTTPClient.Create;
   try
+    LHttpClient.ConnectionTimeout := REQUEST_TIMEOUT_MS;
+    LHttpClient.ResponseTimeout   := REQUEST_TIMEOUT_MS;
     try
       LResponse := LHttpClient.Get(FUrl);
       FResponse := LResponse.ContentAsString(TEncoding.UTF8);
     except
       on E: Exception do
       begin
-        FErro := E.Message;
+        if Assigned(FErroRef) then
+          FErroRef^ := E.Message;
         FResponse := '';
       end;
     end;
